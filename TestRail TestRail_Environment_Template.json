@@ -1,0 +1,27 @@
+{
+	"id": "abb79c95-8c2b-4f6b-bfc4-a23117b138fc",
+	"name": "TestRail Environment",
+	"values": [
+		{
+			"key": "testrail_username",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "testrail_password",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "testrail_baseurl",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-10-26T13:27:53.984Z",
+	"_postman_exported_using": "Postman/11.68.0"
+}

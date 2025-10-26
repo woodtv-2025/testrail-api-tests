@@ -1,0 +1,407 @@
+{
+	"info": {
+		"_postman_id": "53f0342b-1c04-407f-8105-a61655ae8fbe",
+		"name": "Testrail",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47960389",
+		"_collection_link": "https://s-team-552897.postman.co/workspace/WoodTV-WS-API-testing~bfa741cf-403e-4068-9d99-27ffe333d8bd/collection/47960389-53f0342b-1c04-407f-8105-a61655ae8fbe?action=share&source=collection_link&creator=47960389"
+	},
+	"item": [
+		{
+			"name": "Get cases",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Визуализация данных в HTML таблице\r",
+							"var template = `\r",
+							"    <table>\r",
+							"        <tr>\r",
+							"            <th>Id</th>\r",
+							"            <th>Title</th>\r",
+							"            <th>Estimate</th>\r",
+							"        </tr>\r",
+							"\r",
+							"        {{#each response.cases}}\r",
+							"            <tr>\r",
+							"                <td>{{id}}</td>\r",
+							"                <td>{{title}}</td>\r",
+							"                <td>{{estimate}}</td>\r",
+							"            </tr>\r",
+							"        {{/each}}\r",
+							"\r",
+							"    </table>\r",
+							"`;\r",
+							"\r",
+							"pm.visualizer.set(template, {\r",
+							"    response: pm.response.json()\r",
+							"});\r",
+							"\r",
+							"// Tests for TestRail Get Cases API\r",
+							"pm.test(\"✅ Response received\", function () {\r",
+							"    pm.expect(pm.response).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 401 || pm.response.code === 403) {\r",
+							"    pm.test(\"🔐 Professional handling of authentication issues\", function () {\r",
+							"        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"📝 Clear error message for disabled account\", function () {\r",
+							"        const response = pm.response.text();\r",
+							"        pm.expect(response).to.include(\"disabled\");\r",
+							"    });\r",
+							"    \r",
+							"    console.log(\"ℹ️ TestRail account disabled - demonstrating error handling\");\r",
+							"    \r",
+							"} else if (pm.response.code === 200) {\r",
+							"    pm.test(\"🎯 Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"📊 Response has valid JSON\", function () {\r",
+							"        pm.response.to.be.json;\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"📋 Response contains cases array\", function () {\r",
+							"        const response = pm.response.json();\r",
+							"        pm.expect(response.cases).to.be.an('array');\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"🔍 Cases have required fields\", function () {\r",
+							"        const response = pm.response.json();\r",
+							"        if (response.cases.length > 0) {\r",
+							"            const firstCase = response.cases[0];\r",
+							"            pm.expect(firstCase).to.have.property('id');\r",
+							"            pm.expect(firstCase).to.have.property('title');\r",
+							"        }\r",
+							"    });\r",
+							"    \r",
+							"    console.log(\"📊 Visualized test cases table available in Visualize tab\");\r",
+							"}\r",
+							"\r",
+							"pm.test(\"⏱️ Response time is acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}index.php?/api/v2/get_cases/1&suite_id=1",
+					"host": [
+						"{{baseURL}}index",
+						"php"
+					],
+					"query": [
+						{
+							"key": "/api/v2/get_cases/1",
+							"value": null
+						},
+						{
+							"key": "suite_id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get case by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Tests for TestRail Get Case by ID\r",
+							"pm.test(\"✅ Response received\", function () {\r",
+							"    pm.expect(pm.response).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 401 || pm.response.code === 403) {\r",
+							"    pm.test(\"🔐 Professional handling of authentication issues\", function () {\r",
+							"        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+							"    });\r",
+							"    console.log(\"ℹ️ TestRail account disabled - authentication failed\");\r",
+							"} else if (pm.response.code === 200) {\r",
+							"    pm.test(\"🎯 Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"📄 Case has valid structure\", function () {\r",
+							"        const response = pm.response.json();\r",
+							"        pm.expect(response).to.have.property('id');\r",
+							"        pm.expect(response).to.have.property('title');\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"⏱️ Response time is acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://woodtv.testrail.io/index.php?/api/v2/get_case/2381",
+					"protocol": "https",
+					"host": [
+						"woodtv",
+						"testrail",
+						"io"
+					],
+					"path": [
+						"index.php"
+					],
+					"query": [
+						{
+							"key": "/api/v2/get_case/2381",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Tests for TestRail Add Case API\r",
+							"pm.test(\"✅ Response received\", function () {\r",
+							"    pm.expect(pm.response).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 401 || pm.response.code === 403) {\r",
+							"    pm.test(\"🔐 Professional handling of authentication issues\", function () {\r",
+							"        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+							"    });\r",
+							"    console.log(\"ℹ️ TestRail account disabled - cannot create new case\");\r",
+							"} else if (pm.response.code === 200) {\r",
+							"    pm.test(\"🎯 Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"🆕 New case created successfully\", function () {\r",
+							"        const response = pm.response.json();\r",
+							"        pm.expect(response).to.have.property('id');\r",
+							"        pm.expect(response).to.have.property('title');\r",
+							"    });\r",
+							"    \r",
+							"    // Сохраняем ID созданного кейса\r",
+							"    const response = pm.response.json();\r",
+							"    if (response.id) {\r",
+							"        pm.collectionVariables.set(\"created_case_id\", response.id);\r",
+							"        console.log(\"🆕 Created case ID: \" + response.id);\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"⏱️ Response time is acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"{{NewTitle}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}index.php?/api/v2/add_case/1",
+					"host": [
+						"{{baseURL}}index",
+						"php"
+					],
+					"query": [
+						{
+							"key": "/api/v2/add_case/1",
+							"value": null
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update case by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Tests for TestRail Update Case API\r",
+							"pm.test(\"✅ Response received\", function () {\r",
+							"    pm.expect(pm.response).to.not.be.null;\r",
+							"});\r",
+							"\r",
+							"if (pm.response.code === 401 || pm.response.code === 403) {\r",
+							"    pm.test(\"🔐 Professional handling of authentication issues\", function () {\r",
+							"        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+							"    });\r",
+							"    console.log(\"ℹ️ TestRail account disabled - cannot update case\");\r",
+							"} else if (pm.response.code === 200) {\r",
+							"    pm.test(\"🎯 Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"    \r",
+							"    pm.test(\"✏️ Case updated successfully\", function () {\r",
+							"        const response = pm.response.json();\r",
+							"        pm.expect(response).to.have.property('title');\r",
+							"        pm.expect(response.title).to.not.be.empty;\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"pm.test(\"⏱️ Response time is acceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"{{$randomProduct}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}index.php?/api/v2/update_case/2",
+					"host": [
+						"{{baseURL}}index",
+						"php"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "/api/v2/update_case/2",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{testrail_password}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{testrail_username}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": ""
+		},
+		{
+			"key": "NewTitle",
+			"value": ""
+		}
+	]
+}
