@@ -4,19 +4,19 @@
 	"values": [
 		{
 			"key": "testrail_username",
-			"value": "",
+			"value": "YOUR_TESTRAIL_EMAIL_HERE",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "testrail_password",
-			"value": "",
+			"value": "YOUR_TESTRAIL_PASSWORD_OR_API_KEY_HERE",
 			"type": "default",
 			"enabled": true
 		},
 		{
 			"key": "testrail_baseurl",
-			"value": "",
+			"value": "https://your-domain.testrail.io",
 			"type": "default",
 			"enabled": true
 		}
